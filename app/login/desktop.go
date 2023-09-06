@@ -32,9 +32,11 @@ type Options struct {
 func Desktop(ctx context.Context, opts *Options) error {
 	ns := viper.GetString(consts.FlagNamespace)
 
-	kvd, err := kv.New(kv.Options{
-		Path: consts.KVPath,
-		NS:   ns,
+	kvd, err := kv.NewEtcd(kv.EtcdOptions{
+		NS:       viper.GetString(consts.FlagNamespace),
+		EndPoint: []string{"10.8.5.21:2379"},
+		Username: "",
+		Password: "",
 	})
 	if err != nil {
 		return err

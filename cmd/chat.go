@@ -17,7 +17,7 @@ func NewChat() *cobra.Command {
 		Short: "A set of chat tools",
 	}
 
-	cmd.AddCommand(NewChatList(), NewChatExport())
+	cmd.AddCommand(NewChatList(), NewChatExport(), NewChatSendMsg(), NewChatSearch())
 
 	return cmd
 }
@@ -115,5 +115,37 @@ func NewChatExport() *cobra.Command {
 		}
 	})
 
+	return cmd
+}
+
+func NewChatSendMsg() *cobra.Command {
+	var opts chat.SendOptions
+
+	cmd := &cobra.Command{
+		Use:   "send",
+		Short: "send msg to contact",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return chat.Send(logger.Named(cmd.Context(), "send"), opts)
+		},
+	}
+
+	cmd.Flags().StringVarP(&opts.Username, "username", "u", "true", "username")
+	cmd.Flags().StringVarP(&opts.Msg, "msg", "m", "true", "msg")
+
+	return cmd
+}
+
+func NewChatSearch() *cobra.Command {
+	var opts chat.AddOptions
+
+	cmd := &cobra.Command{
+		Use:   "add",
+		Short: "add contacts to user",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return chat.Add(logger.Named(cmd.Context(), "add"), opts)
+		},
+	}
+
+	cmd.Flags().StringVarP(&opts.Username, "username", "u", "true", "username")
 	return cmd
 }

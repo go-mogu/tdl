@@ -35,9 +35,16 @@ func New(ctx context.Context, login bool, middlewares ...telegram.Middleware) (*
 	if test := viper.GetString(consts.FlagTest); test != "" {
 		kvd, err = kv.NewFile(filepath.Join(os.TempDir(), test)) // persistent storage
 	} else {
-		kvd, err = kv.New(kv.Options{
-			Path: consts.KVPath,
-			NS:   viper.GetString(consts.FlagNamespace),
+		//kvd, err = kv.New(kv.Options{
+		//	Path: consts.KVPath,
+		//	NS:   viper.GetString(consts.FlagNamespace),
+		//})
+		kvd, err = kv.NewEtcd(kv.EtcdOptions{
+			Ctx:      ctx,
+			NS:       viper.GetString(consts.FlagNamespace),
+			EndPoint: []string{"10.8.5.21:2379"},
+			Username: "",
+			Password: "",
 		})
 	}
 	if err != nil {

@@ -1,11 +1,17 @@
-## tdl chat
+## tdl chat send
 
-A set of chat tools
+send msg to contact
+
+```
+tdl chat send [flags]
+```
 
 ### Options
 
 ```
-  -h, --help   help for chat
+  -h, --help              help for send
+  -m, --msg string        msg (default "true")
+  -u, --username string   username (default "true")
 ```
 
 ### Options inherited from parent commands
@@ -24,9 +30,5 @@ A set of chat tools
 
 ### SEE ALSO
 
-* [tdl](tdl.md)	 - Telegram Downloader, but more than a downloader
-* [tdl chat add](tdl_chat_add.md)	 - add contacts to user
-* [tdl chat export](tdl_chat_export.md)	 - export messages from (protected) chat for download
-* [tdl chat ls](tdl_chat_ls.md)	 - List your chats
-* [tdl chat send](tdl_chat_send.md)	 - send msg to contact
+* [tdl chat](tdl_chat.md)	 - A set of chat tools
 
