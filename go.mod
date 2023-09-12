@@ -10,7 +10,7 @@ require (
 	github.com/cockroachdb/pebble v0.0.0-20220107203702-aa376a819bf6
 	github.com/fatih/color v1.15.0
 	github.com/go-playground/validator/v10 v10.15.3
-	github.com/gorilla/websocket v1.4.1
+	github.com/gorilla/websocket v1.5.0
 	github.com/gotd/contrib v0.19.0
 	github.com/gotd/td v0.85.0
 	github.com/mattn/go-runewidth v0.0.15
