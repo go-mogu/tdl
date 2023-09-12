@@ -26,6 +26,18 @@ func Code(ctx context.Context) error {
 		if err = c.Ping(ctx); err != nil {
 			return err
 		}
+		status, err := c.Auth().Status(ctx)
+		if err != nil {
+			return err
+		}
+		if status.Authorized {
+			user, err := c.Self(ctx)
+			if err != nil {
+				return err
+			}
+			color.Blue("Login successfully! ID: %d, Username: %s", user.ID, user.Username)
+			return nil
+		}
 
 		if viper.GetString(consts.FlagTest) != "" {
 			authClient := auth.NewClient(c.API(), rand.Reader, telegram.TestAppID, telegram.TestAppHash)

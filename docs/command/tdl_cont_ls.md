@@ -1,12 +1,21 @@
-## tdl
+## tdl cont ls
 
-Telegram Downloader, but more than a downloader
+List your contacts
+
+```
+tdl cont ls [flags]
+```
 
 ### Options
 
 ```
+  -h, --help   help for ls
+```
+
+### Options inherited from parent commands
+
+```
       --debug                        enable debug mode
-  -h, --help                         help for tdl
   -l, --limit int                    max number of concurrent tasks (default 2)
   -n, --ns string                    namespace for Telegram session
       --ntp string                   ntp server host, if not set, use system time
@@ -19,8 +28,5 @@ Telegram Downloader, but more than a downloader
 
 ### SEE ALSO
 
-* [tdl chat](tdl_chat.md)	 - A set of chat tools
 * [tdl cont](tdl_cont.md)	 - A set of contacts tools
-* [tdl login](tdl_login.md)	 - Login to Telegram
-* [tdl version](tdl_version.md)	 - Check the version info
 

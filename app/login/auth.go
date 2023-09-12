@@ -15,7 +15,7 @@ import (
 type noSignUp struct{}
 
 func (c noSignUp) SignUp(_ context.Context) (auth.UserInfo, error) {
-	return auth.UserInfo{}, errors.New("searchx don't support sign up Telegram account")
+	return auth.UserInfo{}, errors.New("search don't support sign up Telegram account")
 }
 
 func (c noSignUp) AcceptTermsOfService(_ context.Context, tos tg.HelpTermsOfService) error {

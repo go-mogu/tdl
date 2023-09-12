@@ -81,7 +81,7 @@ func List(ctx context.Context, opts ListOptions) error {
 		return fmt.Errorf("failed to compile filter: %w", err)
 	}
 
-	c, kvd, err := tgc.NoLogin(ctx, ratelimit.New(rate.Every(time.Millisecond*400), 2))
+	c, kvd, err := tgc.NoLogin(ctx, nil, ratelimit.New(rate.Every(time.Millisecond*400), 2))
 	if err != nil {
 		return err
 	}

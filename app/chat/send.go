@@ -24,7 +24,7 @@ type SendOptions struct {
 func Send(ctx context.Context, opts SendOptions) error {
 	log := logger.From(ctx)
 
-	c, kvd, err := tgc.NoLogin(ctx, ratelimit.New(rate.Every(time.Millisecond*400), 2))
+	c, kvd, err := tgc.NoLogin(ctx, nil, ratelimit.New(rate.Every(time.Millisecond*400), 2))
 	if err != nil {
 		return err
 	}

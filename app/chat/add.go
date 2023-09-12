@@ -17,7 +17,7 @@ type AddOptions struct {
 func Add(ctx context.Context, opts AddOptions) error {
 	log := logger.From(ctx)
 
-	c, _, err := tgc.NoLogin(ctx, ratelimit.New(rate.Every(time.Millisecond*400), 2))
+	c, _, err := tgc.NoLogin(ctx, nil, ratelimit.New(rate.Every(time.Millisecond*400), 2))
 	if err != nil {
 		return err
 	}
@@ -31,6 +31,11 @@ func Add(ctx context.Context, opts AddOptions) error {
 			return err
 		}
 
+		//importContacts, err := c.API().ContactsImportContacts(ctx, []tg.InputPhoneContact{{Phone: "+8618028658256"}})
+		//if err != nil {
+		//	return err
+		//}
+		//fmt.Println(importContacts.Users)
 		for _, user := range search.Users {
 			t := user.(*tg.User)
 			log.Info(user.String())

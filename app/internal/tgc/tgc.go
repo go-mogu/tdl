@@ -26,7 +26,7 @@ import (
 	"github.com/iyear/tdl/pkg/utils"
 )
 
-func New(ctx context.Context, login bool, middlewares ...telegram.Middleware) (*telegram.Client, kv.KV, error) {
+func New(ctx context.Context, login bool, updateHandler telegram.UpdateHandler, middlewares ...telegram.Middleware) (*telegram.Client, kv.KV, error) {
 	var (
 		kvd kv.KV
 		err error
@@ -35,10 +35,6 @@ func New(ctx context.Context, login bool, middlewares ...telegram.Middleware) (*
 	if test := viper.GetString(consts.FlagTest); test != "" {
 		kvd, err = kv.NewFile(filepath.Join(os.TempDir(), test)) // persistent storage
 	} else {
-		//kvd, err = kv.New(kv.Options{
-		//	Path: consts.KVPath,
-		//	NS:   viper.GetString(consts.FlagNamespace),
-		//})
 		kvd, err = kv.NewEtcd(kv.EtcdOptions{
 			Ctx:      ctx,
 			NS:       viper.GetString(consts.FlagNamespace),
@@ -62,6 +58,10 @@ func New(ctx context.Context, login bool, middlewares ...telegram.Middleware) (*
 	mode, err := kvd.Get(key.App())
 	if err != nil {
 		mode = []byte(consts.AppBuiltin)
+	} else {
+		if string(mode) != "" {
+			login = false
+		}
 	}
 	app, ok := consts.Apps[string(mode)]
 	if !ok {
@@ -83,6 +83,7 @@ func New(ctx context.Context, login bool, middlewares ...telegram.Middleware) (*
 		},
 		Device:         consts.Device,
 		SessionStorage: storage.NewSession(kvd, login),
+		UpdateHandler:  updateHandler,
 		RetryInterval:  5 * time.Second,
 		MaxRetries:     5,
 		DialTimeout:    10 * time.Second,
@@ -108,10 +109,10 @@ func New(ctx context.Context, login bool, middlewares ...telegram.Middleware) (*
 	return telegram.NewClient(appId, appHash, opts), kvd, nil
 }
 
-func NoLogin(ctx context.Context, middlewares ...telegram.Middleware) (*telegram.Client, kv.KV, error) {
-	return New(ctx, false, append(middlewares, floodwait.NewSimpleWaiter())...)
+func NoLogin(ctx context.Context, updateHandler telegram.UpdateHandler, middlewares ...telegram.Middleware) (*telegram.Client, kv.KV, error) {
+	return New(ctx, false, updateHandler, append(middlewares, floodwait.NewSimpleWaiter())...)
 }
 
 func Login(ctx context.Context, middlewares ...telegram.Middleware) (*telegram.Client, kv.KV, error) {
-	return New(ctx, true, append(middlewares, floodwait.NewSimpleWaiter())...)
+	return New(ctx, true, nil, append(middlewares, floodwait.NewSimpleWaiter())...)
 }
