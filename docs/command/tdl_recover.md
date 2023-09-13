@@ -1,15 +1,16 @@
-## tdl cont ls
+## tdl recover
 
-List your contacts
+Recover your data
 
 ```
-tdl cont ls [flags]
+tdl recover [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for ls
+  -f, --file string   backup file path
+  -h, --help          help for recover
 ```
 
 ### Options inherited from parent commands
@@ -29,5 +30,5 @@ tdl cont ls [flags]
 
 ### SEE ALSO
 
-* [tdl cont](tdl_cont.md)	 - A set of contacts tools
+* [tdl](tdl.md)	 - Telegram Downloader, but more than a downloader
 

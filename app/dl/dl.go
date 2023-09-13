@@ -45,7 +45,7 @@ type parser struct {
 }
 
 func Run(ctx context.Context, opts *Options) error {
-	c, kvd, err := tgc.NoLogin(ctx)
+	c, kvd, err := tgc.NoLogin(ctx, nil)
 	if err != nil {
 		return err
 	}

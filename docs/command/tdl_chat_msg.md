@@ -1,20 +1,16 @@
-## tdl upload
+## tdl chat msg
 
-Upload anything to Telegram
+msg
 
 ```
-tdl upload [flags]
+tdl chat msg [flags]
 ```
 
 ### Options
 
 ```
-  -c, --chat string        chat id or domain, and empty means 'Saved Messages'
-  -e, --excludes strings   exclude the specified file extensions
-  -h, --help               help for upload
-  -p, --path strings       dirs or files
-      --photo              upload the image as a photo instead of a file
-      --rm                 remove the uploaded files after uploading
+  -h, --help    help for msg
+      --store   store
 ```
 
 ### Options inherited from parent commands
@@ -34,5 +30,5 @@ tdl upload [flags]
 
 ### SEE ALSO
 
-* [tdl](tdl.md)	 - Telegram Downloader, but more than a downloader
+* [tdl chat](tdl_chat.md)	 - A set of chat tools
 

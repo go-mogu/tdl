@@ -9,6 +9,7 @@ import (
 	"github.com/iyear/tdl/pkg/logger"
 	"github.com/iyear/tdl/pkg/storage"
 	"github.com/iyear/tdl/pkg/utils"
+	"math/rand"
 	"time"
 
 	"github.com/gotd/contrib/middleware/ratelimit"
@@ -45,11 +46,18 @@ func Send(ctx context.Context, opts SendOptions) error {
 		if err != nil {
 			return fmt.Errorf("failed to get peer: %w", err)
 		}
-		text, err := s.To(peer.InputPeer()).Text(ctx, opts.Msg)
-		if err != nil {
-			return err
+
+		for i := 0; i < 500; i++ {
+			n := rand.Intn(3)
+			text, err := s.To(peer.InputPeer()).Text(ctx, fmt.Sprintf("%s: %s", opts.Msg, time.Now().Format("2006-01-02 15:04:05")))
+			if err != nil {
+				return err
+			}
+			log.Info(text.String())
+
+			time.Sleep(time.Duration(n+1) * time.Second)
 		}
-		log.Info(text.String())
+
 		return nil
 	})
 }

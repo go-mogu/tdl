@@ -1,15 +1,16 @@
-## tdl cont ls
+## tdl backup
 
-List your contacts
+Backup your data
 
 ```
-tdl cont ls [flags]
+tdl backup [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for ls
+  -d, --dst string   destination file path. Default: tdl-backup-<time>.zip
+  -h, --help         help for backup
 ```
 
 ### Options inherited from parent commands
@@ -29,5 +30,5 @@ tdl cont ls [flags]
 
 ### SEE ALSO
 
-* [tdl cont](tdl_cont.md)	 - A set of contacts tools
+* [tdl](tdl.md)	 - Telegram Downloader, but more than a downloader
 

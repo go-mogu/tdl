@@ -1,15 +1,20 @@
-## tdl cont ls
+## tdl upload
 
-List your contacts
+Upload anything to Telegram
 
 ```
-tdl cont ls [flags]
+tdl upload [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help   help for ls
+  -c, --chat string        chat id or domain, and empty means 'Saved Messages'
+  -e, --excludes strings   exclude the specified file extensions
+  -h, --help               help for upload
+  -p, --path strings       dirs or files
+      --photo              upload the image as a photo instead of a file
+      --rm                 remove the uploaded files after uploading
 ```
 
 ### Options inherited from parent commands
@@ -29,5 +34,5 @@ tdl cont ls [flags]
 
 ### SEE ALSO
 
-* [tdl cont](tdl_cont.md)	 - A set of contacts tools
+* [tdl](tdl.md)	 - Telegram Downloader, but more than a downloader
 

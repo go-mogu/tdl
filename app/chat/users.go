@@ -39,7 +39,7 @@ type User struct {
 }
 
 func Users(ctx context.Context, opts UsersOptions) error {
-	c, kvd, err := tgc.NoLogin(ctx, ratelimit.New(rate.Every(rateInterval), rateBucket))
+	c, kvd, err := tgc.NoLogin(ctx, nil, ratelimit.New(rate.Every(rateInterval), rateBucket))
 	if err != nil {
 		return err
 	}

@@ -20,8 +20,12 @@ Telegram Downloader, but more than a downloader
 
 ### SEE ALSO
 
+* [tdl backup](tdl_backup.md)	 - Backup your data
 * [tdl chat](tdl_chat.md)	 - A set of chat tools
 * [tdl cont](tdl_cont.md)	 - A set of contacts tools
+* [tdl download](tdl_download.md)	 - Download anything from Telegram (protected) chat
 * [tdl login](tdl_login.md)	 - Login to Telegram
+* [tdl recover](tdl_recover.md)	 - Recover your data
+* [tdl upload](tdl_upload.md)	 - Upload anything to Telegram
 * [tdl version](tdl_version.md)	 - Check the version info
 

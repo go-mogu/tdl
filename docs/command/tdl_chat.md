@@ -26,7 +26,9 @@ A set of chat tools
 ### SEE ALSO
 
 * [tdl](tdl.md)	 - Telegram Downloader, but more than a downloader
-* [tdl chat export](tdl_chat_export.md)	 - export messages from (protected) chat for download
+* [tdl chat add](tdl_chat_add.md)	 - add contacts to user
 * [tdl chat ls](tdl_chat_ls.md)	 - List your chats
+* [tdl chat msg](tdl_chat_msg.md)	 - msg
+* [tdl chat send](tdl_chat_send.md)	 - send msg to contact
 * [tdl chat users](tdl_chat_users.md)	 - export users from (protected) channels
 

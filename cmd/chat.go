@@ -14,7 +14,7 @@ func NewChat() *cobra.Command {
 		Short: "A set of chat tools",
 	}
 
-	cmd.AddCommand(NewChatList(), NewChatSendMsg(), NewChatSearch(), NewChatMessage(),NewChatUsers())
+	cmd.AddCommand(NewChatList(), NewChatSendMsg(), NewChatSearch(), NewChatMessage(), NewChatUsers())
 
 	return cmd
 }
@@ -74,7 +74,7 @@ func NewChatMessage() *cobra.Command {
 		Use:   "msg",
 		Short: "msg",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return chat.Message(logger.Named(cmd.Context(), "msg"), opts)
+			return chat.NewMessage(logger.Named(cmd.Context(), "msg"), opts)
 		},
 	}
 	cmd.Flags().BoolVar(&opts.Store, "store", false, "store")
