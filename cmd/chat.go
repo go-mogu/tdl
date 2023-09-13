@@ -14,7 +14,7 @@ func NewChat() *cobra.Command {
 		Short: "A set of chat tools",
 	}
 
-	cmd.AddCommand(NewChatList(), NewChatSendMsg(), NewChatSearch(), NewChatMessage())
+	cmd.AddCommand(NewChatList(), NewChatSendMsg(), NewChatSearch(), NewChatMessage(),NewChatUsers())
 
 	return cmd
 }
@@ -78,5 +78,22 @@ func NewChatMessage() *cobra.Command {
 		},
 	}
 	cmd.Flags().BoolVar(&opts.Store, "store", false, "store")
+	return cmd
+}
+
+func NewChatUsers() *cobra.Command {
+	var opts chat.UsersOptions
+
+	cmd := &cobra.Command{
+		Use:   "users",
+		Short: "export users from (protected) channels",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return chat.Users(logger.Named(cmd.Context(), "users"), opts)
+		},
+	}
+
+	cmd.Flags().StringVarP(&opts.Output, "output", "o", "tdl-users.json", "output JSON file path")
+	cmd.Flags().StringVarP(&opts.Chat, "chat", "c", "", "domain id (channels, supergroups, etc.)")
+	cmd.Flags().BoolVar(&opts.Raw, "raw", false, "export raw message struct of Telegram MTProto API, useful for debugging")
 	return cmd
 }

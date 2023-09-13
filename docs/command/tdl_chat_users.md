@@ -1,17 +1,18 @@
-## tdl chat ls
+## tdl chat users
 
-List your chats
+export users from (protected) channels
 
 ```
-tdl chat ls [flags]
+tdl chat users [flags]
 ```
 
 ### Options
 
 ```
-  -f, --filter string   filter chats by expression (default "true")
-  -h, --help            help for ls
-  -o, --output string   output format: {table|json} (default "table")
+  -c, --chat string     domain id (channels, supergroups, etc.)
+  -h, --help            help for users
+  -o, --output string   output JSON file path (default "tdl-users.json")
+      --raw             export raw message struct of Telegram MTProto API, useful for debugging
 ```
 
 ### Options inherited from parent commands

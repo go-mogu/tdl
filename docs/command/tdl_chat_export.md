@@ -1,17 +1,25 @@
-## tdl chat ls
+## tdl chat export
 
-List your chats
+export messages from (protected) chat for download
 
 ```
-tdl chat ls [flags]
+tdl chat export [flags]
 ```
 
 ### Options
 
 ```
-  -f, --filter string   filter chats by expression (default "true")
-  -h, --help            help for ls
-  -o, --output string   output format: {table|json} (default "table")
+      --all             export all messages including non-media messages, but still affected by filter and type flag
+  -c, --chat string     chat id or domain. If not specified, 'Saved Messages' will be used
+  -f, --filter string   filter messages by expression, defaults to match all messages. Specify '-' to see available fields (default "true")
+  -h, --help            help for export
+  -i, --input ints      input data, depends on export type
+  -o, --output string   output JSON file path (default "tdl-export.json")
+      --raw             export raw message struct of Telegram MTProto API, useful for debugging
+      --reply int       specify channel post id
+      --topic int       specify topic id
+  -T, --type string     export type. time: timestamp range, id: message id range, last: last N messages: {time|id|last} (default "time")
+      --with-content    export with message content
 ```
 
 ### Options inherited from parent commands
