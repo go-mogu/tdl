@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
-	github.com/antonmedv/expr v1.15.1
+	github.com/antonmedv/expr v1.15.2
 	github.com/bcicen/jstream v1.0.1
 	github.com/beevik/ntp v1.3.0
 	github.com/cenkalti/backoff/v4 v4.2.1
@@ -14,9 +14,11 @@ require (
 	github.com/go-faster/errors v0.6.1
 	github.com/go-faster/jx v1.1.0
 	github.com/go-playground/validator/v10 v10.15.4
+	github.com/google/uuid v1.3.1
+	github.com/go-playground/validator/v10 v10.15.4
 	github.com/gorilla/websocket v1.5.0
 	github.com/gotd/contrib v0.19.0
-	github.com/gotd/td v0.86.0
+	github.com/gotd/td v0.87.0
 	github.com/iancoleman/strcase v0.3.0
 	github.com/jedib0t/go-pretty/v6 v6.4.7
 	github.com/mattn/go-runewidth v0.0.15
@@ -35,7 +37,7 @@ require (
 	go.etcd.io/bbolt v1.3.7
 	go.etcd.io/etcd/client/v3 v3.5.9
 	go.uber.org/multierr v1.11.0
-	go.uber.org/zap v1.25.0
+	go.uber.org/zap v1.26.0
 	golang.org/x/net v0.15.0
 	golang.org/x/sync v0.3.0
 	golang.org/x/time v0.3.0
