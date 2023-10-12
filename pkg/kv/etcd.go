@@ -43,7 +43,7 @@ func NewEtcd(opts EtcdOptions) (KV, error) {
 
 func (e *Etcd) Get(key string) ([]byte, error) {
 	var val []byte
-	resp, err := e.kv.Get(e.ctx, fmt.Sprintf("/%s/%s", e.ns, key))
+	resp, err := e.kv.Get(e.ctx, fmt.Sprintf("/tg/%s/%s/json", e.ns, key))
 	if err != nil {
 		return nil, err
 	}
@@ -55,12 +55,12 @@ func (e *Etcd) Get(key string) ([]byte, error) {
 }
 
 func (e *Etcd) Set(key string, val []byte) error {
-	_, err := e.kv.Put(e.ctx, fmt.Sprintf("/%s/%s", e.ns, key), string(val))
+	_, err := e.kv.Put(e.ctx, fmt.Sprintf("/tg/%s/%s/json", e.ns, key), string(val))
 	return err
 }
 
 // Delete removes a key from the bucket. If the key does not exist then nothing is done and a nil error is returned
 func (e *Etcd) Delete(key string) error {
-	_, err := e.kv.Delete(e.ctx, fmt.Sprintf("/%s/%s", e.ns, key))
+	_, err := e.kv.Delete(e.ctx, fmt.Sprintf("/tg/%s/%s/json", e.ns, key))
 	return err
 }

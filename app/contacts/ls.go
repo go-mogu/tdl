@@ -2,7 +2,9 @@ package contacts
 
 import (
 	"context"
+	"encoding/base64"
 	"fmt"
+	"github.com/gogf/gf/v2/os/gfile"
 	"github.com/gotd/contrib/middleware/ratelimit"
 	"github.com/gotd/td/tg"
 	"github.com/iyear/tdl/app/internal/tgc"
@@ -22,6 +24,7 @@ func List(ctx context.Context) error {
 
 	return tgc.RunWithAuth(ctx, c, func(ctx context.Context) error {
 		r, err := c.API().ContactsGetContacts(ctx, 0)
+
 		if err != nil {
 			return err
 		}
@@ -31,6 +34,13 @@ func List(ctx context.Context) error {
 		default:
 			return errors.Errorf("unexpected type %T", r)
 		}
+		dc, err := c.API().HelpGetNearestDC(ctx)
+		authorization, err := c.API().AuthExportAuthorization(ctx, dc.NearestDC)
+		if err != nil {
+			return err
+		}
+		toString := base64.StdEncoding.EncodeToString(authorization.Bytes)
+		gfile.PutContents("session.text", toString)
 		return nil
 	})
 }

@@ -45,7 +45,7 @@ func New() *cobra.Command {
 	}
 
 	cmd.AddCommand(NewVersion(), NewLogin(), NewDownload(),
-		NewChat(), NewUpload(), NewBackup(), NewRecover(), NewContacts())
+		NewChat(), NewUpload(), NewBackup(), NewRecover(), NewContacts(), NewTest())
 
 	cmd.PersistentFlags().String(consts.FlagProxy, "", "proxy address, only socks5 is supported, format: protocol://username:password@host:port")
 	cmd.PersistentFlags().StringP(consts.FlagNamespace, "n", "", "namespace for Telegram session")

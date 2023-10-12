@@ -105,8 +105,8 @@ func New(ctx context.Context, login bool, updateHandler telegram.UpdateHandler, 
 		zap.Int("app", app.AppID),
 		zap.String("mode", string(mode)),
 		zap.Bool("is_login", login))
-
-	return telegram.NewClient(appId, appHash, opts), kvd, nil
+	client := telegram.NewClient(appId, appHash, opts)
+	return client, kvd, nil
 }
 
 func NoLogin(ctx context.Context, updateHandler telegram.UpdateHandler, middlewares ...telegram.Middleware) (*telegram.Client, kv.KV, error) {

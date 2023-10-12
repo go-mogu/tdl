@@ -91,7 +91,8 @@ func List(ctx context.Context, opts ListOptions) error {
 		if err != nil {
 			return err
 		}
-
+		self, err := c.Self(ctx)
+		fmt.Println(self)
 		blocked, err := utils.Telegram.GetBlockedDialogs(ctx, c.API())
 		if err != nil {
 			return err

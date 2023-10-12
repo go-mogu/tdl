@@ -9,18 +9,25 @@ import (
 	"github.com/gotd/contrib/middleware/ratelimit"
 	"github.com/gotd/contrib/pebble"
 	"github.com/gotd/contrib/storage"
+	"github.com/gotd/td/telegram"
+	msg "github.com/gotd/td/telegram/message"
+	"github.com/gotd/td/telegram/peers"
 	"github.com/gotd/td/telegram/query"
 	"github.com/gotd/td/telegram/updates"
 	updhook "github.com/gotd/td/telegram/updates/hook"
 	"github.com/gotd/td/tg"
 	"github.com/iyear/tdl/app/internal/tgc"
 	"github.com/iyear/tdl/pkg/consts"
+	"github.com/iyear/tdl/pkg/kv"
 	"github.com/iyear/tdl/pkg/logger"
+	storage1 "github.com/iyear/tdl/pkg/storage"
+	"github.com/iyear/tdl/pkg/utils"
 	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 	"go.uber.org/zap"
 	"golang.org/x/time/rate"
 	"path/filepath"
+	"strconv"
 	"time"
 )
 
@@ -147,9 +154,10 @@ func StoreMessage(ctx context.Context) error {
 	})
 }
 
-func NoStoreMessage(ctx context.Context) error {
+func NoStoreMessage(ctx context.Context) (err error) {
 	log := logger.From(ctx)
-
+	var c *telegram.Client
+	var kvd kv.KV
 	d := tg.NewUpdateDispatcher()
 	gaps := updates.New(updates.Config{
 		Handler: d,
@@ -161,9 +169,11 @@ func NoStoreMessage(ctx context.Context) error {
 			return nil
 		}
 		fmt.Printf("msg: %s\n", msg.Message)
-		return nil
+		peerClass := msg.GetPeerID()
+
+		return SendMsg(ctx, c, kvd, msg.Message, peerClass.(*tg.PeerUser).UserID)
 	})
-	c, _, err := tgc.NoLogin(ctx, gaps, ratelimit.New(rate.Every(time.Millisecond*400), 2), updhook.UpdateHook(gaps.Handle))
+	c, kvd, err = tgc.NoLogin(ctx, gaps, ratelimit.New(rate.Every(time.Millisecond*400), 2), updhook.UpdateHook(gaps.Handle))
 	if err != nil {
 		return err
 	}
@@ -180,4 +190,21 @@ func NoStoreMessage(ctx context.Context) error {
 			},
 		})
 	})
+}
+
+func SendMsg(ctx context.Context, c *telegram.Client, kvd kv.KV, textMsg string, chatId int64) (err error) {
+	s := msg.NewSender(c.API())
+
+	manager := peers.Options{Storage: storage1.NewPeers(kvd)}.Build(c.API())
+	peer, err := utils.Telegram.GetInputPeer(ctx, manager, strconv.FormatInt(chatId, 10))
+	if err != nil {
+		return fmt.Errorf("failed to get peer: %w", err)
+	}
+	text, err := s.To(peer.InputPeer()).Text(ctx, fmt.Sprintf("%s: %s", textMsg, time.Now().Format("2006-01-02 15:04:05")))
+	if err != nil {
+		return err
+	}
+	fmt.Println(text.String())
+
+	return
 }
