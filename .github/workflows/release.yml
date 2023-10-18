@@ -11,24 +11,24 @@ permissions:
 
 jobs:
   goreleaser:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Fetch all tags
         run: git fetch --force --tags
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         with:
           go-version: 1.19
           cache: true
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v2
+        uses: goreleaser/goreleaser-action@v5
         with:
           distribution: goreleaser
           version: v1.18.2
-          args: release --rm-dist --timeout 1h
+          args: release --rm-dist --timeout 1h -p 1
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
