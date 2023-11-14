@@ -45,12 +45,11 @@ type ExportOptions struct {
 }
 
 type Message struct {
-	ID   int         `json:"id"`
-	Type string      `json:"type"`
-	File string      `json:"file"`
-	Date int         `json:"date,omitempty"`
-	Text string      `json:"text,omitempty"`
-	Raw  *tg.Message `json:"raw,omitempty"`
+	ID   int    `json:"id"`
+	Type string `json:"type"`
+	File string `json:"file"`
+	Date int    `json:"date,omitempty"`
+	Text string `json:"text,omitempty"`
 }
 
 const (
@@ -128,7 +127,6 @@ func Export(ctx context.Context, opts *ExportOptions) error {
 			iter = iter.OffsetID(opts.Input[1] + 1) // #89: retain the last msg id
 		case ExportTypeLast:
 		}
-
 		f, err := os.Create(opts.Output)
 		if err != nil {
 			return err
@@ -211,9 +209,6 @@ func Export(ctx context.Context, opts *ExportOptions) error {
 			if opts.WithContent {
 				t.Date = m.Date
 				t.Text = m.Message
-			}
-			if opts.Raw {
-				t.Raw = m
 			}
 
 			mb, err := json.Marshal(t)

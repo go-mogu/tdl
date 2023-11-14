@@ -72,7 +72,7 @@ func (i *iter) Value(ctx context.Context) (*uploader.Item, error) {
 	var thumb *os.File
 	// has thumbnail
 	if cur.thumb != "" {
-		tMime, err := mimetype.DetectFile(cur.thumb)
+		tMime, err := mimetype.DetectReader(f)
 		if err != nil || !utils.Media.IsImage(tMime.String()) { // TODO(iyear): jpg only
 			return nil, fmt.Errorf("invalid thumbnail file: %s", cur.thumb)
 		}

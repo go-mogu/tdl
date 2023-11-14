@@ -115,7 +115,7 @@ func (t telegram) GetInputPeer(ctx context.Context, manager *peers.Manager, from
 		return p, nil
 	}
 
-	return nil, fmt.Errorf("failed to get result from %d：%v", id, err)
+	return manager.Resolve(ctx, from)
 }
 
 func (t telegram) GetPeerID(peer tg.PeerClass) int64 {

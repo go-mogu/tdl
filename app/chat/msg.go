@@ -158,6 +158,7 @@ func NoStoreMessage(ctx context.Context) (err error) {
 	log := logger.From(ctx)
 	var c *telegram.Client
 	var kvd kv.KV
+	fmt.Println(kvd)
 	d := tg.NewUpdateDispatcher()
 	gaps := updates.New(updates.Config{
 		Handler: d,
@@ -169,9 +170,28 @@ func NoStoreMessage(ctx context.Context) (err error) {
 			return nil
 		}
 		fmt.Printf("msg: %s\n", msg.Message)
-		peerClass := msg.GetPeerID()
+		//peerClass := msg.GetPeerID()
 
-		return SendMsg(ctx, c, kvd, msg.Message, peerClass.(*tg.PeerUser).UserID)
+		//return SendMsg(ctx, c, kvd, msg.Message, peerClass.(*tg.PeerUser).UserID)
+		return nil
+	})
+	//发送消息已读回调
+	d.OnReadHistoryOutbox(func(ctx context.Context, e tg.Entities, update *tg.UpdateReadHistoryOutbox) error {
+		fmt.Println(update)
+		return nil
+	})
+	//接收消息已读回调
+	d.OnReadHistoryInbox(func(ctx context.Context, e tg.Entities, update *tg.UpdateReadHistoryInbox) error {
+		fmt.Println(update)
+		return nil
+	})
+	d.OnNewChannelMessage(func(ctx context.Context, e tg.Entities, update *tg.UpdateNewChannelMessage) error {
+		msg, ok := update.Message.(*tg.Message)
+		if !ok {
+			return nil
+		}
+		fmt.Printf("msg: %s\n", msg.Message)
+		return nil
 	})
 	c, kvd, err = tgc.NoLogin(ctx, gaps, ratelimit.New(rate.Every(time.Millisecond*400), 2), updhook.UpdateHook(gaps.Handle))
 	if err != nil {

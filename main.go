@@ -2,15 +2,16 @@ package main
 
 import (
 	"context"
+	"github.com/fatih/color"
 	"os"
 	"os/signal"
-
-	"github.com/fatih/color"
 
 	"github.com/iyear/tdl/cmd"
 )
 
 func main() {
+	//withTimeout, cancelFunc := context.WithTimeout(context.Background(), 120*time.Second)
+	//defer cancelFunc()
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 

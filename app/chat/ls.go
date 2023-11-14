@@ -1,9 +1,14 @@
 package chat
 
 import (
+	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/gotd/td/telegram/thumbnail"
+	"image/jpeg"
+	"image/png"
 	"strconv"
 	"strings"
 	"time"
@@ -27,6 +32,7 @@ import (
 type Dialog struct {
 	ID          int64   `json:"id" comment:"ID of dialog"`
 	Type        string  `json:"type" comment:"Type of dialog. Can be 'user', 'channel' or 'group'"`
+	Photo       string  `json:"photo"`
 	VisibleName string  `json:"visible_name,omitempty" comment:"Title of channel and group, first and last name of user. If empty, output '-'"`
 	Username    string  `json:"username,omitempty" comment:"Username of dialog. If empty, output '-'"`
 	Topics      []Topic `json:"topics,omitempty" comment:"Topics of dialog. If not set, output '-'"`
@@ -97,12 +103,11 @@ func List(ctx context.Context, opts ListOptions) error {
 		if err != nil {
 			return err
 		}
-
 		manager := peers.Options{Storage: storage.NewPeers(kvd)}.Build(c.API())
+
 		result := make([]*Dialog, 0, len(dialogs))
 		for _, d := range dialogs {
 			id := utils.Telegram.GetInputPeerID(d.Peer)
-
 			// we can update our access hash state if there is any new peer.
 			if err = applyPeers(ctx, manager, d.Entities, id); err != nil {
 				log.Warn("failed to apply peer updates", zap.Int64("id", id), zap.Error(err))
@@ -112,7 +117,6 @@ func List(ctx context.Context, opts ListOptions) error {
 			if _, ok := blocked[id]; ok {
 				continue
 			}
-
 			var r *Dialog
 			switch t := d.Peer.(type) {
 			case *tg.InputPeerUser:
@@ -203,6 +207,24 @@ func processUser(id int64, entities peer.Entities) *Dialog {
 	if !ok {
 		return nil
 	}
+	photo, b := u.Photo.AsNotEmpty()
+	if b {
+		expand, err := thumbnail.Expand(photo.StrippedThumb)
+		if err != nil {
+			panic(err)
+		}
+		img, err := jpeg.Decode(bytes.NewReader(expand))
+		if err != nil {
+			panic(err)
+		}
+
+		var buf bytes.Buffer
+		if err := png.Encode(&buf, img); err != nil {
+			panic(err)
+		}
+		toString := base64.StdEncoding.EncodeToString(buf.Bytes())
+		fmt.Println(toString)
+	}
 
 	return &Dialog{
 		ID:          u.ID,
@@ -214,11 +236,11 @@ func processUser(id int64, entities peer.Entities) *Dialog {
 }
 
 func processChannel(ctx context.Context, api *tg.Client, id int64, entities peer.Entities) *Dialog {
+
 	c, ok := entities.Channel(id)
 	if !ok {
 		return nil
 	}
-
 	d := &Dialog{
 		ID:          c.ID,
 		VisibleName: c.Title,
@@ -265,7 +287,6 @@ func processChat(id int64, entities peer.Entities) *Dialog {
 	if !ok {
 		return nil
 	}
-
 	return &Dialog{
 		ID:          c.ID,
 		VisibleName: c.Title,

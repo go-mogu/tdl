@@ -16,7 +16,7 @@ func NewChat() *cobra.Command {
 		Short: "A set of chat tools",
 	}
 
-	cmd.AddCommand(NewChatList(), NewChatSendMsg(), NewChatSearch(), NewChatMessage(), NewChatExport(), NewChatUsers())
+	cmd.AddCommand(NewChatList(), NewChatSendMsg(), NewChatSearch(), NewChatMessage(), NewChatExport(), NewChatUsers(), NewChatStickerDownLoad())
 
 	return cmd
 }
@@ -176,5 +176,21 @@ func NewChatUsers() *cobra.Command {
 	cmd.Flags().StringVarP(&opts.Output, "output", "o", "tdl-users.json", "output JSON file path")
 	cmd.Flags().StringVarP(&opts.Chat, "chat", "c", "", "domain id (channels, supergroups, etc.)")
 	cmd.Flags().BoolVar(&opts.Raw, "raw", false, "export raw message struct of Telegram MTProto API, useful for debugging")
+	return cmd
+}
+
+func NewChatStickerDownLoad() *cobra.Command {
+	var opts chat.StickerOptions
+
+	cmd := &cobra.Command{
+		Use:   "sticker",
+		Short: "sticker",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return chat.Download(logger.Named(cmd.Context(), "sticker"), opts)
+		},
+	}
+
+	cmd.Flags().StringVarP(&opts.ShortName, "shortname", "", "true", "shortname")
+
 	return cmd
 }
