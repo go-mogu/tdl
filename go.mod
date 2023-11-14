@@ -16,7 +16,7 @@ require (
 	github.com/go-faster/errors v0.6.1
 	github.com/go-faster/jx v1.1.0
 	github.com/go-playground/validator/v10 v10.15.5
-	github.com/gogf/gf/v2 v2.5.4
+	github.com/gogf/gf/v2 v2.5.6
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/websocket v1.5.0
 	github.com/gotd/contrib v0.19.0
