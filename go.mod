@@ -38,7 +38,7 @@ require (
 	github.com/stretchr/testify v1.8.4
 	github.com/tidwall/gjson v1.17.0
 	github.com/yapingcat/gomedia v0.0.0-20230727105416-c491e66c9d2a
-	go.etcd.io/bbolt v1.3.7
+	go.etcd.io/bbolt v1.3.8
 	go.etcd.io/etcd/client/v3 v3.5.9
 	go.uber.org/multierr v1.11.0
 	go.uber.org/zap v1.26.0
