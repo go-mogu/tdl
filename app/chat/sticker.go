@@ -70,7 +70,7 @@ func Download(ctx context.Context, opts StickerOptions) error {
 						return
 					}
 					_ = gfile.Mkdir(asModified.Set.ShortName)
-					f, err := os.Create(asModified.Set.ShortName + "/" + gconv.String(i) + ".gif")
+					f, err := os.Create("sticker/" + asModified.Set.ShortName + "/" + gconv.String(i) + ".gif")
 					if err != nil {
 						return
 					}
@@ -83,20 +83,16 @@ func Download(ctx context.Context, opts StickerOptions) error {
 					if err != nil {
 						return
 					}
-					//err = gfile.PutBytes(asModified.Set.ShortName+"/"+gconv.String(i)+".webp", b)
-					//if err != nil {
-					//	return
-					//}
 				} else {
 					opt := libtgsconverter.NewConverterOptions()
 					opt.SetExtension("gif")
 					//opt.SetScale(0.46875)
 					ret, err := libtgsconverter.ImportFromData(b, opt)
-					err = gfile.PutBytes(asModified.Set.ShortName+"/"+gconv.String(i)+".gif", ret)
+					err = gfile.PutBytes("sticker/"+asModified.Set.ShortName+"/"+gconv.String(i)+".gif", ret)
 					if err != nil {
 						return
 					}
-					err = gfile.PutBytes(asModified.Set.ShortName+"/"+gconv.String(i)+".tgs", b)
+					err = gfile.PutBytes("sticker/"+asModified.Set.ShortName+"/"+gconv.String(i)+".tgs", b)
 					if err != nil {
 						return
 					}

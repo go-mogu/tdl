@@ -1,14 +1,9 @@
 package chat
 
 import (
-	"bytes"
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/gotd/td/telegram/thumbnail"
-	"image/jpeg"
-	"image/png"
 	"strconv"
 	"strings"
 	"time"
@@ -206,24 +201,6 @@ func processUser(id int64, entities peer.Entities) *Dialog {
 	u, ok := entities.User(id)
 	if !ok {
 		return nil
-	}
-	photo, b := u.Photo.AsNotEmpty()
-	if b {
-		expand, err := thumbnail.Expand(photo.StrippedThumb)
-		if err != nil {
-			panic(err)
-		}
-		img, err := jpeg.Decode(bytes.NewReader(expand))
-		if err != nil {
-			panic(err)
-		}
-
-		var buf bytes.Buffer
-		if err := png.Encode(&buf, img); err != nil {
-			panic(err)
-		}
-		toString := base64.StdEncoding.EncodeToString(buf.Bytes())
-		fmt.Println(toString)
 	}
 
 	return &Dialog{
