@@ -39,3 +39,8 @@ func (m *Memory) Delete(key string) error {
 	delete(m.data, key)
 	return nil
 }
+
+func (m *Memory) WithNs(ns string) {
+	//TODO implement me
+	panic("implement me")
+}

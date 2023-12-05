@@ -3,6 +3,7 @@ package storage
 import (
 	"context"
 	"errors"
+	"github.com/gogf/gf/v2/frame/g"
 
 	"github.com/gotd/td/telegram"
 
@@ -34,6 +35,7 @@ func (s *Session) LoadSession(_ context.Context) ([]byte, error) {
 	return b, nil
 }
 
-func (s *Session) StoreSession(_ context.Context, data []byte) error {
+func (s *Session) StoreSession(ctx context.Context, data []byte) error {
+	g.Log().Info(ctx, "存储session")
 	return s.kv.Set(key.Session(), data)
 }

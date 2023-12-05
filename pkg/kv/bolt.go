@@ -1,6 +1,8 @@
 package kv
 
 import (
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gctx"
 	"go.etcd.io/bbolt"
 )
 
@@ -36,4 +38,9 @@ func (b *Bolt) Delete(key string) error {
 	return b.db.Update(func(tx *bbolt.Tx) error {
 		return tx.Bucket(b.ns).Delete([]byte(key))
 	})
+}
+
+func (b *Bolt) WithNs(ns string) {
+	g.Log().Info(gctx.New(), "修改ns:", ns)
+	b.ns = []byte(ns)
 }

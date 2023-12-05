@@ -4,8 +4,11 @@ import (
 	"context"
 	"fmt"
 	"github.com/gogf/gf/v2/container/garray"
+	"github.com/gogf/gf/v2/container/gmap"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/os/gfile"
+	"github.com/gogf/gf/v2/text/gregex"
 	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/gogf/gf/v2/util/grand"
 	"github.com/gotd/contrib/middleware/ratelimit"
@@ -13,8 +16,10 @@ import (
 	"github.com/gotd/td/telegram/peers"
 	"github.com/gotd/td/tg"
 	"github.com/iyear/tdl/app/internal/tgc"
+	"github.com/iyear/tdl/pkg/consts"
 	"github.com/iyear/tdl/pkg/storage"
 	"github.com/iyear/tdl/pkg/utils"
+	"github.com/spf13/viper"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"golang.org/x/time/rate"
 	"time"
@@ -195,58 +200,51 @@ func getLocalCtl(ctx context.Context) *clientv3.Client {
 }
 
 func Test2(ctx context.Context) error {
-	//ctl := getLocalCtl(ctx)
-	//nsSet := gset.New()
-	//getRes, err := ctl.Get(ctx, "/tg/", clientv3.WithPrefix())
-	//if err != nil {
-	//	return err
-	//}
-	//for _, kv := range getRes.Kvs {
-	//	key := string(kv.Key)
-	//	gstr.Replace()
-	//}
-	//fmt.Println(getRes)
+	ctl := getLocalCtl(ctx)
+	nstMap := gmap.NewStrAnyMap()
+	getRes, err := ctl.Get(ctx, "/new/tg/", clientv3.WithPrefix())
+	if err != nil {
+		return err
+	}
+	for _, kv := range getRes.Kvs {
+		key := string(kv.Key)
+		g.Log().Info(ctx, "key:", key)
+		result, err := gregex.MatchString(`[\d]+`, key)
+		if err != nil {
+			return err
+		}
+		ns := result[0]
+		g.Log().Info(ctx, "ns:", ns)
+		var keys []string
+		if nstMap.Contains(ns) {
+			list := nstMap.Get(ns)
+			keys = list.([]string)
+		} else {
+			keys = make([]string, 0)
+		}
+		keys = append(keys, key)
+		nstMap.Set(ns, keys)
+	}
+	var count = 0
+	for _, key := range nstMap.Keys() {
+		viper.Set(consts.FlagNamespace, key)
+		g.Log().Info(ctx, viper.GetString(consts.FlagNamespace))
+		c, _, err := tgc.NoLogin(ctx, nil, ratelimit.New(rate.Every(time.Millisecond*400), 2))
+		if err != nil {
+			return err
+		}
+		ctx := gctx.New()
+		timeout, cancelFunc := context.WithTimeout(ctx, 15*time.Second)
+		_ = tgc.RunWithAuth(timeout, c, func(timeout context.Context) (err error) {
+			self, err := c.Self(timeout)
+			g.Log().Info(timeout, "self", self)
+			count++
+			return
+		})
+		cancelFunc()
+	}
+	g.Log().Info(ctx, "有效账号数量:", count)
 	return nil
-	//c, kvd, err := tgc.NoLogin(ctx, nil, ratelimit.New(rate.Every(time.Millisecond*400), 2))
-	//fmt.Println(kvd)
-	//if err != nil {
-	//	return err
-	//}
-	//return tgc.RunWithAuth(ctx, c, func(ctx context.Context) (err error) {
-	//	photos, err := c.API().PhotosGetUserPhotos(ctx, &tg.PhotosGetUserPhotosRequest{
-	//		UserID: &tg.InputUser{
-	//			UserID:     6404682374,
-	//			AccessHash: 1253764901697455252,
-	//		},
-	//	})
-	//	if err != nil {
-	//		return
-	//	}
-	//
-	//	fmt.Println(photos)
-	//	for _, photo := range photos.GetPhotos() {
-	//		d, _ := photo.AsNotEmpty()
-	//		a := tg.InputPhotoFileLocation{
-	//			ID:            d.ID,
-	//			AccessHash:    d.AccessHash,
-	//			FileReference: d.FileReference,
-	//		}
-	//
-	//		file, err := c.API().UploadGetFile(ctx, &tg.UploadGetFileRequest{
-	//			Precise:  false,
-	//			Location: &a,
-	//			Limit:    512 * 1024,
-	//		})
-	//		if err != nil {
-	//			return err
-	//		}
-	//		fmt.Println(file)
-	//
-	//	}
-	//
-	//	return
-	//})
-
 }
 
 func Test3(ctx context.Context) error {
@@ -293,16 +291,81 @@ func Test3(ctx context.Context) error {
 }
 
 func Test4(ctx context.Context) error {
-	c, _, err := tgc.NoLogin(ctx, nil, ratelimit.New(rate.Every(time.Millisecond*400), 2))
+	oldPrefix := "/tg/"
+	newPrefix := "/new"
+	ctl := getLocalCtl(ctx)
+	nstMap := gmap.NewStrAnyMap()
+	getRes, err := ctl.Get(ctx, oldPrefix, clientv3.WithPrefix())
+	if err != nil {
+		return err
+	}
+	for _, kv := range getRes.Kvs {
+		key := string(kv.Key)
+		g.Log().Info(ctx, "key:", key)
+		result, err := gregex.MatchString(`[\d]+`, key)
+		if err != nil {
+			return err
+		}
+		ns := result[0]
+		g.Log().Info(ctx, "ns:", ns)
+		var keys []string
+		if nstMap.Contains(ns) {
+			list := nstMap.Get(ns)
+			keys = list.([]string)
+		} else {
+			keys = make([]string, 0)
+		}
+		keys = append(keys, key)
+		nstMap.Set(ns, keys)
+	}
+	var count = 0
+	for _, key := range nstMap.Keys() {
+		viper.Set(consts.FlagNamespace, key)
+		g.Log().Info(ctx, viper.GetString(consts.FlagNamespace))
+		c, _, err := tgc.NoLogin(ctx, nil, ratelimit.New(rate.Every(time.Millisecond*400), 2))
+		if err != nil {
+			return err
+		}
+		ctx := gctx.New()
+		timeout, cancelFunc := context.WithTimeout(ctx, 30*time.Second)
+		err = tgc.RunWithAuth(timeout, c, func(timeout context.Context) (err error) {
+			self, err := c.Self(timeout)
+			//转移原有session
+			g.Log().Info(timeout, "key是否正确:", key == self.Phone, "手机号:", self.Phone)
+			g.Log().Info(timeout, "转移原有session", key)
+			get, _ := ctl.Get(timeout, oldPrefix+key, clientv3.WithPrefix())
+			for _, keyValue := range get.Kvs {
+				_, _ = ctl.Put(timeout, newPrefix+gstr.Replace(string(keyValue.Key), key, self.Phone), string(keyValue.Value))
+			}
+			count++
+			return
+		})
+		if err != nil {
+			// session无效，清除session
+			g.Log().Warning(ctx, "清理无用session:", key)
+			//_, _ = ctl.Delete(ctx, "/tg/"+key, clientv3.WithPrefix())
+
+		}
+		cancelFunc()
+	}
+	g.Log().Info(ctx, "有效账号数量:", count)
+	return nil
+
+}
+
+func Test5(ctx context.Context) error {
+	c, kvd, err := tgc.NoLogin(ctx, nil, ratelimit.New(rate.Every(time.Millisecond*400), 2))
+	fmt.Println(kvd)
 	if err != nil {
 		return err
 	}
 	return tgc.RunWithAuth(ctx, c, func(ctx context.Context) (err error) {
-		self, err := c.Self(ctx)
+		info, err := c.API().UsersGetFullUser(ctx, &tg.InputUserSelf{})
 		if err != nil {
 			return err
 		}
-		g.Log().Info(ctx, self)
+		g.Log().Info(ctx, info)
+
 		return
 	})
 

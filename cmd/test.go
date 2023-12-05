@@ -11,7 +11,7 @@ func NewTest() *cobra.Command {
 		Use:   "test",
 		Short: "A set of chat tools",
 	}
-	cmd.AddCommand(NewTest1(), NewTest2(), NewTest3(), NewTest4())
+	cmd.AddCommand(NewTest1(), NewTest2(), NewTest3(), NewTest4(), NewTest5())
 	return cmd
 }
 
@@ -61,6 +61,19 @@ func NewTest4() *cobra.Command {
 		Short: "List your chats",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return test.Test4(logger.Named(cmd.Context(), "test4"))
+		},
+	}
+
+	return cmd
+}
+
+func NewTest5() *cobra.Command {
+
+	cmd := &cobra.Command{
+		Use:   "test5",
+		Short: "List your chats",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return test.Test5(logger.Named(cmd.Context(), "test5"))
 		},
 	}
 

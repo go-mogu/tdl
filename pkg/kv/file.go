@@ -93,3 +93,8 @@ func (f *File) write(m map[string][]byte) error {
 
 	return os.WriteFile(f.path, bytes, 0o644)
 }
+
+func (f *File) WithNs(ns string) {
+	//TODO implement me
+	panic("implement me")
+}

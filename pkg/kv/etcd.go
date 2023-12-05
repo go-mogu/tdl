@@ -64,3 +64,7 @@ func (e *Etcd) Delete(key string) error {
 	_, err := e.kv.Delete(e.ctx, fmt.Sprintf("/tg/%s/%s/json", e.ns, key))
 	return err
 }
+
+func (e *Etcd) WithNs(ns string) {
+	e.ns = ns
+}
