@@ -30,7 +30,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.13.0
 	github.com/onsi/gomega v1.28.0
 	github.com/pkg/errors v0.9.1
-	github.com/shirou/gopsutil/v3 v3.23.9
+	github.com/shirou/gopsutil/v3 v3.23.12
 	github.com/sizeofint/webpanimation v0.0.0-20210809145948-1d2b32119882
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/pflag v1.0.5
@@ -79,7 +79,7 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/go-cmp v0.5.9 // indirect
+	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/pprof v0.0.0-20210407192527-94a9f03dee38 // indirect
 	github.com/gotd/ige v0.2.2 // indirect
 	github.com/gotd/neo v0.1.5 // indirect
@@ -133,7 +133,7 @@ require (
 	go4.org v0.0.0-20200411211856-f5505b9728dd // indirect
 	golang.org/x/crypto v0.14.0 // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
-	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/term v0.13.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/tools v0.13.0 // indirect
